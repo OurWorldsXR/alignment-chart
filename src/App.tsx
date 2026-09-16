@@ -151,7 +151,6 @@ function App() {
     <main className="app-shell">
       <header className="topbar">
         <div className="identity">
-          <span className="eyebrow">CREATIVE FUTURES</span>
           <h1>When is it OK to use AI?</h1>
         </div>
         <div className="toolbar">
@@ -164,10 +163,7 @@ function App() {
       <div className="workspace">
         <section className="prompt-panel" aria-labelledby="prompt-heading">
           <div className="panel-heading">
-            <div>
-              <span className="section-kicker">FILMMAKING</span>
-              <h2 id="prompt-heading">Practices</h2>
-            </div>
+            <h2 id="prompt-heading">Use Cases</h2>
             <span className="count">{placedCount}/{prompts.length} placed</span>
           </div>
           <p className="instruction">Choose a practice, then tap or click where it belongs on the chart. Move it as the conversation changes.</p>
@@ -177,27 +173,20 @@ function App() {
               return (
                 <button
                   key={prompt.id}
-                  className={`prompt-row${selectedId === prompt.id ? ' selected' : ''}`}
+                  className={`prompt-row${selectedId === prompt.id ? ' selected' : ''}${placed ? ' is-placed' : ''}`}
                   onClick={() => setSelectedId(prompt.id)}
                   aria-pressed={selectedId === prompt.id}
+                  aria-label={`${prompt.label}${placed ? ', placed' : ''}`}
                 >
                   <span className="prompt-number">{String(index + 1).padStart(2, '0')}</span>
                   <span className="prompt-label">{prompt.label}</span>
-                  <span className={`prompt-status${placed ? ' is-placed' : ''}`} aria-label={placed ? 'Placed' : 'Not placed'}>{placed ? '●' : '○'}</span>
                 </button>
               )
             })}
           </div>
         </section>
 
-        <section className="chart-panel" aria-labelledby="chart-heading">
-          <div className="chart-heading">
-            <div>
-              <span className="section-kicker">CLASS DISCUSSION</span>
-              <h2 id="chart-heading">Place each practice</h2>
-            </div>
-            <span className="chart-hint">{selected ? `Selected: ${selected.label}` : 'Select a practice to begin'}</span>
-          </div>
+        <section className="chart-panel" aria-label="Alignment chart">
           <div className="chart-frame">
             <span className="axis-label axis-top">No pressure</span>
             <span className="axis-label axis-bottom">Lots of pressure</span>
@@ -274,7 +263,7 @@ function App() {
                       place(prompt.id, { x: clamp(position.x + offset.x), y: clamp(position.y + offset.y) })
                     }}
                   >
-                    <span className="card-number">{index + 1}</span>
+                    <span className="card-number">{String(index + 1).padStart(2, '0')}</span>
                     <span className="card-text">{prompt.label}</span>
                   </button>
                 )
@@ -282,10 +271,14 @@ function App() {
               {placedCount === 0 && <div className="empty-chart" aria-hidden="true">Choose a practice to start the discussion</div>}
             </div>
           </div>
+          {selectedPosition && (
+            <output className="coordinate-readout" aria-live="off">
+              x: {selectedPosition.x.toFixed(1)}, y: {selectedPosition.y.toFixed(1)}
+            </output>
+          )}
           {selected && (
             <div className="selection-controls">
               <div className="selection-title">
-                <span className="section-kicker">SELECTED PRACTICE</span>
                 <strong>{selected.label}</strong>
               </div>
               {selectedPosition ? (
