@@ -151,7 +151,7 @@ function App() {
     <main className="app-shell">
       <header className="topbar">
         <div className="identity">
-          <span className="eyebrow">OURWORLDS · CREATIVE FUTURES</span>
+          <span className="eyebrow">CREATIVE FUTURES</span>
           <h1>When is it OK to use AI?</h1>
         </div>
         <div className="toolbar">
@@ -188,7 +188,6 @@ function App() {
               )
             })}
           </div>
-          <p className="draft-note">Working labels · course copy under review</p>
         </section>
 
         <section className="chart-panel" aria-labelledby="chart-heading">

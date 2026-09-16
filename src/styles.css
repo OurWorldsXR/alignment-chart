@@ -38,7 +38,6 @@ h2 { font-size: 1.22rem; margin: 5px 0 0; letter-spacing: -.025em; }
 .prompt-label { font-size: .92rem; line-height: 1.25; }
 .prompt-status { color: #79848e; font-size: .9rem; }
 .prompt-status.is-placed { color: #eecb56; }
-.draft-note { color: #8d98a3; font-size: .77rem; margin: 12px 1px; }
 
 .chart-panel { min-width: 0; }
 .chart-heading { min-height: 42px; margin-bottom: 14px; }
