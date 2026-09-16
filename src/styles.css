@@ -30,7 +30,7 @@ h2 { font-size: 1.22rem; margin: 5px 0 0; letter-spacing: -.025em; }
 .panel-heading, .chart-heading { display: flex; justify-content: space-between; align-items: end; gap: 12px; }
 .count { color: #eecb56; white-space: nowrap; font-size: .84rem; font-weight: 700; }
 .instruction { color: #b7c1c9; line-height: 1.4; font-size: .95rem; margin: 15px 0 16px; }
-.prompt-list { display: grid; gap: 5px; max-height: min(68vh, 730px); overflow-y: auto; padding: 1px 4px 1px 1px; }
+.prompt-list { display: grid; gap: 5px; padding: 1px 4px 1px 1px; }
 .prompt-row { display: grid; grid-template-columns: 30px 1fr 18px; align-items: center; gap: 9px; width: 100%; text-align: left; background: #222832; color: #e8edf1; border: 1px solid #373f4a; border-radius: 8px; padding: 10px 11px; min-height: 43px; }
 .prompt-row:hover { border-color: #7eabb5; background: #28323d; }
 .prompt-row.selected { border-color: #54c9df; box-shadow: inset 3px 0 #54c9df; background: #253742; }
@@ -71,7 +71,7 @@ h2 { font-size: 1.22rem; margin: 5px 0 0; letter-spacing: -.025em; }
   .topbar { align-items: start; }
   .workspace { grid-template-columns: 1fr; }
   .prompt-panel { order: 2; }
-  .prompt-list { max-height: none; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .prompt-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .chart-frame { padding: 43px 73px 58px 92px; }
 }
 @media (max-width: 650px) {
