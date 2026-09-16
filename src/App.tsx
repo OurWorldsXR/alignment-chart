@@ -68,12 +68,20 @@ function App() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const boardRef = useRef<HTMLDivElement>(null)
   const draggingId = useRef<string | null>(null)
+  const dragStart = useRef<Point | null>(null)
+  const dragMoved = useRef(false)
+  const [saveStatus, setSaveStatus] = useState('Saved on this device')
   const placedCount = Object.keys(placements).length
   const selected = prompts.find((prompt) => prompt.id === selectedId)
   const selectedPosition = selectedId ? placements[selectedId] : undefined
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(placements))
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(placements))
+      setSaveStatus('Saved on this device')
+    } catch {
+      setSaveStatus('Could not save here — export your work')
+    }
   }, [placements])
 
   useEffect(() => {
@@ -147,7 +155,7 @@ function App() {
           <h1>When is it OK to use AI?</h1>
         </div>
         <div className="toolbar">
-          <span className="saved-indicator" aria-live="polite">Saved on this device</span>
+          <span className="saved-indicator" aria-live="polite">{saveStatus}</span>
           <button className="button button-secondary" onClick={() => downloadJson(placements)}>Export data</button>
           <button className="button button-quiet" onClick={clearChart} disabled={placedCount === 0}>Clear chart</button>
         </div>
@@ -208,6 +216,7 @@ function App() {
                 if (point) place(selectedId, point)
               }}
               onKeyDown={(event) => {
+                if (event.target !== event.currentTarget) return
                 if (event.key === 'Enter' || event.key === ' ') {
                   event.preventDefault()
                   if (selectedId) place(selectedId, placements[selectedId] ?? { x: 50, y: 50 })
@@ -231,21 +240,28 @@ function App() {
                       event.stopPropagation()
                       setSelectedId(prompt.id)
                       draggingId.current = prompt.id
+                      dragStart.current = { x: event.clientX, y: event.clientY }
+                      dragMoved.current = false
                       event.currentTarget.setPointerCapture(event.pointerId)
                     }}
                     onPointerMove={(event) => {
                       if (draggingId.current !== prompt.id) return
+                      const start = dragStart.current
+                      if (!dragMoved.current && start && Math.hypot(event.clientX - start.x, event.clientY - start.y) < 5) return
+                      dragMoved.current = true
                       const point = positionFromPointer(event.clientX, event.clientY)
                       if (point) place(prompt.id, point)
                     }}
                     onPointerUp={(event) => {
-                      if (draggingId.current === prompt.id) {
+                      if (draggingId.current === prompt.id && dragMoved.current) {
                         const point = positionFromPointer(event.clientX, event.clientY)
                         if (point) place(prompt.id, point)
                       }
                       draggingId.current = null
+                      dragStart.current = null
+                      dragMoved.current = false
                     }}
-                    onPointerCancel={() => { draggingId.current = null }}
+                    onPointerCancel={() => { draggingId.current = null; dragStart.current = null; dragMoved.current = false }}
                     onKeyDown={(event) => {
                       const delta = event.shiftKey ? 5 : 1
                       const change: Record<string, Point> = {

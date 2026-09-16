@@ -19,7 +19,7 @@ The x-axis runs from “Never a good idea” to “Always a good idea”; y runs
 
 ## Scope and ownership
 
-- The prompt list in `src/prompts.ts` is **working copy**, not approved curriculum language. Review it with Catherine and Shreya before publication.
+- The 16 filmmaking prompts in `src/prompts.ts` match the shared curriculum document as of September 16, 2026, but remain subject to curriculum review. The document also suggests broader classroom prompts that are not yet part of this filmmaking view.
 - No participant accounts, classroom rooms, live aggregation, public submissions, or remote storage are included. The Google Doc describes a larger possible product; those are not part of this initial teacher-led version.
-- Nothing has been connected to a Vercel account or GitHub remote. Choose deployment ownership explicitly before launch.
+- The GitHub repository may live in the OurWorlds organization while a Vercel deployment lives in a separate account; record both owners before launch.
 - The app is a standard static Vite/React build, so it can be hosted somewhere other than Vercel if the team prefers.
