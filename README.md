@@ -9,7 +9,7 @@ npm install
 npm run dev
 ```
 
-For a production-ready static build, run `npm run build`. Vercel can import this repo as a Vite project with build command `npm run build` and output directory `dist`. No environment variables or backend are required.
+For a production-ready static build, run `npm run build`. The public chart is published by GitHub Pages from the `main` branch through `.github/workflows/pages.yml`. The workflow installs dependencies, builds the app, and publishes `dist`. No environment variables or backend are required.
 
 ## Classroom flow
 
@@ -21,5 +21,5 @@ The x-axis runs from “Never a good idea” to “Always a good idea”; y runs
 
 - The 16 filmmaking prompts in `src/prompts.ts` match the shared curriculum document as of September 16, 2026, but remain subject to curriculum review. The document also suggests broader classroom prompts that are not yet part of this filmmaking view.
 - No participant accounts, classroom rooms, live aggregation, public submissions, or remote storage are included. The Google Doc describes a larger possible product; those are not part of this initial teacher-led version.
-- The GitHub repository may live in the OurWorlds organization while a Vercel deployment lives in a separate account; record both owners before launch.
+- The GitHub repository and GitHub Pages site are both owned by the OurWorlds organization. No separate hosting account is required.
 - The app is a standard static Vite/React build, so it can be hosted somewhere other than Vercel if the team prefers.
