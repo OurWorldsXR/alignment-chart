@@ -42,7 +42,7 @@ h2 { font-size: 1.22rem; margin: 5px 0 0; letter-spacing: -.025em; }
 .chart-panel { min-width: 0; }
 .chart-heading { min-height: 42px; margin-bottom: 14px; }
 .chart-hint { color: #c3d1d5; font-size: .9rem; max-width: 45%; text-align: right; }
-.chart-frame { position: relative; padding: 45px 85px 58px 110px; background: #1d222b; border: 1px solid #414a57; border-radius: 14px; }
+.chart-frame { position: relative; padding: 45px 110px 58px; background: #1d222b; border: 1px solid #414a57; border-radius: 14px; }
 .chart-board { position: relative; width: 100%; aspect-ratio: 1.35 / 1; min-height: 420px; background-color: #202630; background-image: linear-gradient(#ffffff09 1px, transparent 1px), linear-gradient(90deg, #ffffff09 1px, transparent 1px); background-size: 10% 10%; border: 1px solid #8495a5; outline: none; }
 .chart-board.can-place { cursor: crosshair; }
 .gridline { position: absolute; background: #9eb4bf; opacity: .65; pointer-events: none; }
@@ -54,7 +54,7 @@ h2 { font-size: 1.22rem; margin: 5px 0 0; letter-spacing: -.025em; }
 .axis-left { color: #52c8dc; left: 17px; top: 50%; transform: translateY(-50%) rotate(-90deg); transform-origin: center; }
 .axis-right { color: #52c8dc; right: -18px; top: 50%; transform: translateY(-50%) rotate(90deg); transform-origin: center; }
 .empty-chart { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); max-width: 260px; color: #9eabb5; text-align: center; font-size: 1rem; line-height: 1.4; pointer-events: none; background: #202630d9; padding: 12px; }
-.chart-card { position: absolute; display: flex; align-items: center; gap: 6px; max-width: 185px; min-height: 32px; border: 1px solid #e8c953; border-radius: 6px; color: #18222a; background: #ebcf68; font-size: .75rem; line-height: 1.12; font-weight: 750; padding: 4px 7px 4px 4px; transform: translate(-50%, -50%); text-align: left; user-select: none; touch-action: none; cursor: grab; box-shadow: 0 3px 10px #0005; }
+.chart-card { position: absolute; display: flex; align-items: center; gap: 6px; width: max-content; max-width: 185px; min-height: 32px; border: 1px solid #e8c953; border-radius: 6px; color: #18222a; background: #ebcf68; font-size: .75rem; line-height: 1.12; font-weight: 750; padding: 4px 7px 4px 4px; transform: translate(-50%, -50%); text-align: left; user-select: none; touch-action: none; cursor: grab; box-shadow: 0 3px 10px #0005; }
 .chart-card:active { cursor: grabbing; }
 .chart-card.active { z-index: 2; border-color: #ffffff; box-shadow: 0 0 0 3px #52c8dc, 0 5px 14px #0009; }
 .card-number { display: grid; place-items: center; flex: 0 0 auto; width: 22px; height: 22px; border-radius: 4px; color: #e9fbff; background: #273f4a; font-size: .7rem; }
@@ -72,7 +72,7 @@ h2 { font-size: 1.22rem; margin: 5px 0 0; letter-spacing: -.025em; }
   .workspace { grid-template-columns: 1fr; }
   .prompt-panel { order: 2; }
   .prompt-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .chart-frame { padding: 43px 73px 58px 92px; }
+  .chart-frame { padding: 43px 104px 58px; }
 }
 @media (max-width: 650px) {
   .app-shell { padding: 18px 14px 30px; }
@@ -81,7 +81,7 @@ h2 { font-size: 1.22rem; margin: 5px 0 0; letter-spacing: -.025em; }
   .saved-indicator { flex-basis: 100%; }
   .chart-heading { align-items: start; }
   .chart-hint { font-size: .8rem; }
-  .chart-frame { padding: 48px 15px 84px; }
+  .chart-frame { padding: 48px 24px 84px; }
   .chart-board { min-height: 390px; aspect-ratio: auto; }
   .axis-left, .axis-right { top: auto; bottom: 48px; transform: none; font-size: .75rem; }
   .axis-left { left: 16px; }
