@@ -74,6 +74,7 @@ function App() {
   const placedCount = Object.keys(placements).length
   const selected = prompts.find((prompt) => prompt.id === selectedId)
   const selectedPosition = selectedId ? placements[selectedId] : undefined
+  const placingUnplaced = selectedId !== null && selectedPosition === undefined
 
   useEffect(() => {
     try {
@@ -193,7 +194,7 @@ function App() {
             <span className="axis-label axis-left">Never a good idea</span>
             <span className="axis-label axis-right">Always a good idea</span>
             <div
-              className={`chart-board${selectedId ? ' can-place' : ''}`}
+              className={`chart-board${selectedId ? ' can-place' : ''}${placingUnplaced ? ' placing-unplaced' : ''}`}
               ref={boardRef}
               role="group"
               tabIndex={0}

@@ -44,6 +44,8 @@ h2 { font-size: 2rem; line-height: 1.2; margin: 0; font-weight: 500; }
 .chart-frame { position: relative; padding: 54px 110px 58px; background: #0d0733; border: 1px solid #495253; border-radius: 18px; }
 .chart-board { position: relative; width: 100%; aspect-ratio: 1.35 / 1; min-height: 420px; background: #17113c; border: 1px solid #495253; border-radius: 20px; outline: none; }
 .chart-board.can-place { cursor: crosshair; }
+/* A new placement should reach the board even when an existing card covers the spot. */
+.chart-board.placing-unplaced .chart-card { pointer-events: none; }
 .gridline { position: absolute; background: #495253; opacity: .85; pointer-events: none; }
 .gridline.vertical { width: 1px; height: 100%; left: 50%; top: 0; }
 .gridline.horizontal { height: 1px; width: 100%; top: 50%; left: 0; }
