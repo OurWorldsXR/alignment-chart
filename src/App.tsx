@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 import { prompts } from './prompts'
 
@@ -66,7 +66,11 @@ function downloadJson(placements: Placements) {
 function App() {
   const [placements, setPlacements] = useState<Placements>(readSaved)
   const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [scrollEdges, setScrollEdges] = useState({ above: false, below: false })
   const boardRef = useRef<HTMLDivElement>(null)
+  const promptPanelRef = useRef<HTMLElement>(null)
+  const chartFrameRef = useRef<HTMLDivElement>(null)
+  const topbarRef = useRef<HTMLElement>(null)
   const draggingId = useRef<string | null>(null)
   const dragStart = useRef<Point | null>(null)
   const dragMoved = useRef(false)
@@ -84,6 +88,47 @@ function App() {
       setSaveStatus('Could not save here — export your work')
     }
   }, [placements])
+
+  useLayoutEffect(() => {
+    const panel = promptPanelRef.current
+    const frame = chartFrameRef.current
+    const topbar = topbarRef.current
+    if (!panel || !frame || !topbar) return
+
+    const updateScrollEdges = () => {
+      const desktop = window.innerWidth > 950
+      const above = desktop && panel.scrollTop > 2
+      const below = desktop && panel.scrollTop + panel.clientHeight < panel.scrollHeight - 2
+      setScrollEdges((current) => current.above === above && current.below === below
+        ? current : { above, below })
+    }
+    const sizePanel = () => {
+      if (window.innerWidth <= 950) {
+        panel.style.removeProperty('max-height')
+        updateScrollEdges()
+        return
+      }
+      const workspace = panel.closest<HTMLElement>('.workspace')
+      const workspacePadding = workspace ? parseFloat(getComputedStyle(workspace).paddingTop) || 0 : 0
+      const panelTop = topbar.getBoundingClientRect().bottom + window.scrollY + workspacePadding
+      const availableHeight = window.innerHeight - panelTop - 24
+      panel.style.maxHeight = `${Math.max(300, Math.min(frame.getBoundingClientRect().height, availableHeight))}px`
+      updateScrollEdges()
+    }
+    const observer = new ResizeObserver(sizePanel)
+    observer.observe(frame)
+    observer.observe(topbar)
+    const list = panel.querySelector('.prompt-list')
+    if (list) observer.observe(list)
+    window.addEventListener('resize', sizePanel)
+    panel.addEventListener('scroll', updateScrollEdges, { passive: true })
+    sizePanel()
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', sizePanel)
+      panel.removeEventListener('scroll', updateScrollEdges)
+    }
+  }, [])
 
   useEffect(() => {
     const context = (document as Document & { modelContext?: ModelContext }).modelContext
@@ -150,7 +195,7 @@ function App() {
 
   return (
     <main className="app-shell">
-      <header className="topbar">
+      <header className="topbar" ref={topbarRef}>
         <div className="identity">
           <h1>When is it OK to use AI?</h1>
         </div>
@@ -162,33 +207,37 @@ function App() {
       </header>
 
       <div className="workspace">
-        <section className="prompt-panel" aria-labelledby="prompt-heading">
-          <div className="panel-heading">
-            <h2 id="prompt-heading">Use Cases</h2>
-            <span className="count">{placedCount}/{prompts.length} placed</span>
-          </div>
-          <p className="instruction">Choose a practice, then tap or click where it belongs on the chart. Move it as the conversation changes.</p>
-          <div className="prompt-list">
-            {prompts.map((prompt, index) => {
-              const placed = Boolean(placements[prompt.id])
-              return (
-                <button
-                  key={prompt.id}
-                  className={`prompt-row${selectedId === prompt.id ? ' selected' : ''}${placed ? ' is-placed' : ''}`}
-                  onClick={() => setSelectedId(prompt.id)}
-                  aria-pressed={selectedId === prompt.id}
-                  aria-label={`${prompt.label}${placed ? ', placed' : ''}`}
-                >
-                  <span className="prompt-number">{String(index + 1).padStart(2, '0')}</span>
-                  <span className="prompt-label">{prompt.label}</span>
-                </button>
-              )
-            })}
-          </div>
-        </section>
+        <div className={`prompt-shell${scrollEdges.above ? ' has-more-above' : ''}${scrollEdges.below ? ' has-more-below' : ''}`}>
+          <section className="prompt-panel" ref={promptPanelRef} aria-labelledby="prompt-heading">
+            <div className="panel-heading">
+              <h2 id="prompt-heading">Use Cases</h2>
+              <span className="count">{placedCount}/{prompts.length} placed</span>
+            </div>
+            <p className="instruction">Choose a practice, then tap or click where it belongs on the chart. Move it as the conversation changes.</p>
+            <div className="prompt-list">
+              {prompts.map((prompt, index) => {
+                const placed = Boolean(placements[prompt.id])
+                return (
+                  <button
+                    key={prompt.id}
+                    className={`prompt-row${selectedId === prompt.id ? ' selected' : ''}${placed ? ' is-placed' : ''}`}
+                    onClick={() => setSelectedId(prompt.id)}
+                    aria-pressed={selectedId === prompt.id}
+                    aria-label={`${prompt.label}${placed ? ', placed' : ''}`}
+                  >
+                    <span className="prompt-number">{String(index + 1).padStart(2, '0')}</span>
+                    <span className="prompt-label">{prompt.label}</span>
+                  </button>
+                )
+              })}
+            </div>
+          </section>
+          <span className="prompt-overflow-cue prompt-overflow-cue-top" aria-hidden="true" />
+          <span className="prompt-overflow-cue prompt-overflow-cue-bottom" aria-hidden="true" />
+        </div>
 
         <section className="chart-panel" aria-label="Alignment chart">
-          <div className="chart-frame">
+          <div className="chart-frame" ref={chartFrameRef}>
             <span className="axis-label axis-top">No pressure</span>
             <span className="axis-label axis-bottom">Lots of pressure</span>
             <span className="axis-label axis-left">Never a good idea</span>

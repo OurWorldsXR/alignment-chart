@@ -25,7 +25,23 @@ h2 { font-size: 2rem; line-height: 1.2; margin: 0; font-weight: 500; }
 .button:disabled { opacity: .42; cursor: not-allowed; }
 
 .workspace { display: grid; grid-template-columns: minmax(310px, 355px) minmax(0, 1fr); align-items: start; gap: clamp(20px, 2.5vw, 40px); padding-top: 24px; }
+.prompt-shell { min-width: 0; position: relative; }
 .prompt-panel { min-width: 0; padding: 24px; border-radius: 20px; background: #06909F; }
+@media (min-width: 951px) {
+  .prompt-shell { position: sticky; top: 16px; }
+  .prompt-panel { overflow-y: auto; }
+  .prompt-overflow-cue { position: absolute; left: 0; right: 0; height: 28px; z-index: 1; opacity: 0; pointer-events: none; transition: opacity .18s ease; }
+  .prompt-overflow-cue-top { top: 0; border-radius: 20px 20px 0 0; background: linear-gradient(to bottom, #003f4bb8, #003f4b00); }
+  .prompt-overflow-cue-bottom { bottom: 0; border-radius: 0 0 20px 20px; background: linear-gradient(to top, #003f4bb8, #003f4b00); }
+  .prompt-overflow-cue::after { content: ''; position: absolute; left: 11px; width: 8px; height: 8px; border-right: 2px solid #EDFFAF; border-bottom: 2px solid #EDFFAF; }
+  .prompt-overflow-cue-top::after { top: 7px; transform: rotate(225deg); }
+  .prompt-overflow-cue-bottom::after { bottom: 7px; transform: rotate(45deg); }
+  .prompt-shell.has-more-above .prompt-overflow-cue-top,
+  .prompt-shell.has-more-below .prompt-overflow-cue-bottom { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .prompt-overflow-cue { transition: none; }
+}
 .panel-heading { display: grid; gap: 14px; }
 .panel-heading h2 { color: #fff; }
 .count { color: #EDFFAF; white-space: nowrap; font-size: .86rem; font-weight: 700; }
@@ -72,7 +88,7 @@ h2 { font-size: 2rem; line-height: 1.2; margin: 0; font-weight: 500; }
 @media (max-width: 950px) {
   .topbar { align-items: start; }
   .workspace { grid-template-columns: 1fr; }
-  .prompt-panel { order: 2; }
+  .prompt-shell { order: 2; }
   .prompt-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .chart-frame { padding: 54px 104px 58px; }
 }
@@ -98,7 +114,7 @@ h2 { font-size: 2rem; line-height: 1.2; margin: 0; font-weight: 500; }
 @media print {
   :root { color: #111; background: white; }
   .app-shell { max-width: none; }
-  .toolbar, .prompt-panel, .selection-controls, .coordinate-readout { display: none; }
+  .toolbar, .prompt-shell, .selection-controls, .coordinate-readout { display: none; }
   .workspace { display: block; }
   .chart-frame { background: white; border-color: #999; }
   .chart-board { background: white; border-color: #555; }
